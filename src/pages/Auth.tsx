@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Seo from "@/components/Seo";
 import { useAuth } from "@/context/AuthContext";
-import { sendPasswordReset } from "@/lib/api";
+import { resendConfirmation, sendPasswordReset } from "@/lib/api";
 import { isDemo } from "@/lib/supabase";
 
 function AuthShell({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
@@ -55,6 +55,17 @@ export function Login({ admin = false }: { admin?: boolean }) {
     }
   };
 
+  const resend = async () => {
+    setInfo("");
+    try {
+      await resendConfirmation(email.trim());
+      setError("");
+      setInfo("Confirmation email sent. Click the link in it, then sign in.");
+    } catch (err) {
+      setError(errorText(err));
+    }
+  };
+
   const forgot = async () => {
     setError("");
     setInfo("");
@@ -81,6 +92,12 @@ export function Login({ admin = false }: { admin?: boolean }) {
             <input type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="input mt-1" />
           </label>
           {error && <p role="alert" className="text-sm text-sindoor">{error}</p>}
+          {/email not confirmed/i.test(error) && (
+            <p className="text-sm text-ink-soft">
+              Click the link in the email we sent you (check spam too).{" "}
+              <button type="button" onClick={resend} className="text-sindoor underline">Send it again</button>
+            </p>
+          )}
           {info && <p role="status" className="text-sm text-ink-soft">{info}</p>}
           <button type="submit" disabled={busy} className={`${admin ? "btn-maroon" : "btn-primary"} w-full`}>
             {busy ? "Signing in…" : "Sign in"}

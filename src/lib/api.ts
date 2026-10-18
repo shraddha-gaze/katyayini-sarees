@@ -267,6 +267,12 @@ export async function signOut() {
   await supabase.auth.signOut();
 }
 
+export async function resendConfirmation(email: string) {
+  if (!supabase) return;
+  const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${window.location.origin}/login` } });
+  if (error) throw error;
+}
+
 export async function sendPasswordReset(email: string) {
   if (!supabase) throw new Error("Password reset needs Supabase. In demo mode use the accounts listed in README.md.");
   const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/account` });
