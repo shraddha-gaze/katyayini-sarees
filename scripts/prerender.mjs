@@ -9,7 +9,7 @@ const dist = join(root, "dist");
 const template = readFileSync(join(dist, "index.html"), "utf8");
 const { render, routes } = await import(pathToFileURL(join(root, "dist-ssr", "entry-server.js")).href);
 
-const site = (process.env.VITE_SITE_URL || readEnv("VITE_SITE_URL") || "https://katyayini.in").replace(/\/$/, "");
+const site = (process.env.VITE_SITE_URL || readEnv("VITE_SITE_URL") || "https://katyayini.vercel.app").replace(/\/$/, "");
 
 for (const route of routes) {
   const { html, head } = render(route);

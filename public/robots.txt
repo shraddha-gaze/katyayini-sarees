@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /account
 Disallow: /cart
 Disallow: /checkout
-Sitemap: https://katyayini.in/sitemap.xml
+Sitemap: https://katyayini.vercel.app/sitemap.xml
